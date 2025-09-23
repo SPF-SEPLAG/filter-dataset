@@ -1,5 +1,6 @@
 import pandas as pd
 import warnings
+from datetime import datetime
 
 warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
 
@@ -8,10 +9,15 @@ df = pd.read_excel(file_path, sheet_name="Relatório 1", skiprows=3)
 df = df.iloc[:, 1:]
 # print(df.head())
 
+current_month = datetime.now().month
+df_filtered = df[df["Mês - Numérico"] == current_month]
+
+# print(df[df["Mês - Numérico"] == current_month])
+
 ### This lets you see the groups
 # print(df.groupby(["Tipo", "Fonte Recurso - Código"]).size())
 
-groups = df.groupby(["Tipo", "Fonte Recurso - Código"])
+groups = df_filtered.groupby(["Tipo", "Fonte Recurso - Código"])
 
 output_path = "./data/output.xlsx"
 with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
