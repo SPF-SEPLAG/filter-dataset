@@ -11,21 +11,21 @@ df = df.iloc[:, 1:]
 df = add_tipo_column(df)
 print(df.head())
 
-current_month = datetime.now().month
-for k in range(1,10):
-    df_filtered = df[df["Mês - Numérico"] == k]
+last_month = datetime.now().month - 1
 
-    # print(df[df["Mês - Numérico"] == current_month])
+df_filtered = df[df["Mês - Numérico"] == last_month]
 
-    ### This lets you see the groups
-    # print(df.groupby(["Tipo", "Fonte Recurso - Código"]).size())
+# print(df[df["Mês - Numérico"] == current_month])
 
-    groups = df_filtered.groupby(["Tipo", "Fonte Recurso - Código"])
+### This lets you see the groups
+# print(df.groupby(["Tipo", "Fonte Recurso - Código"]).size())
 
-    output_path = f"./data/output_{k}.xlsx"
-    with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
-        for k, ((tipo, fonte), group_df) in enumerate(groups):
-            # print(tipo, fonte)
-            # print(group_df)
-            sheet_name = f"{tipo} - Fonte {fonte}"
-            group_df.to_excel(writer, sheet_name=sheet_name, index=False)
+groups = df_filtered.groupby(["Tipo", "Fonte Recurso - Código"])
+
+output_path = f"./data/output_{last_month}.xlsx"
+with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
+    for k, ((tipo, fonte), group_df) in enumerate(groups):
+        # print(tipo, fonte)
+        # print(group_df)
+        sheet_name = f"{tipo} - Fonte {fonte}"
+        group_df.to_excel(writer, sheet_name=sheet_name, index=False)
